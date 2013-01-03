@@ -28,7 +28,8 @@ int main () {
 	cout<< (p1*p1) <<endl;
 	cout<< (p1*p1/p1/p1) <<endl;
 	cout<< ((p1+p1)/p1)<<endl;
-
+	cout<< (p1+p1*p1)%(p1*p1)<<endl;
+	
 
 	
 	

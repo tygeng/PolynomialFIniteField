@@ -1,3 +1,10 @@
+/* This class represent a polynomial and the coefficients should elements
+ * from a field. The class uses a vector of field elements to represent
+ * the coefficients of this polynomial.
+ *
+ * Since the highest term (last elements in the vector) should never be zero,
+ * an empty vector means 0.
+ */
 #ifndef POLYNOMIAL
 #define POLYNOMIAL
 #include<vector>
@@ -31,9 +38,10 @@ public:
         return coefficients==p.coefficients;
     }
 
-// private:
+private:
     std::vector<F> coefficients;
 	friend std::ostream& operator<< <>(std::ostream& out, const Polynomial<F> f);
+	// clean up the high terms if they are zero.
     int clean();
 };
 
@@ -44,22 +52,27 @@ const Polynomial<F> Polynomial<F>::one(F::one);
 
 template<class F>
 std::ostream& operator<< (std::ostream& out, const Polynomial<F> f) {
-// 	out<<f.coefficients.size();
+	//output "0" when the vector is empty.
 	if(f.coefficients.empty()) {
 		return out<<"0";
 	}
+	//output the constant
 	if(! (f.coefficients[0]==F::zero)) {
 		out<<f.coefficients[0];
 	}
+	//output the other power of x
 	for (unsigned i=1;i<f.coefficients.size();i++) {
 		if (f.coefficients[i]==F::zero) {
 			continue;
 		}else{
+			//if the coefficient is one, omit the coefficient and only put "x"
 			if(f.coefficients[i]==F::one) {
 				out<<" + x";
 			}else{
+				// otherwise put the coefficient before the "x"
 				out<<" + "<<f.coefficients[i]<<"x";
 			}
+			//if the power is higher than 1, put "x^i" instead of a plain "x".
 			if(i!=1) {
 				out<<"^"<<i;
 			}
@@ -67,7 +80,6 @@ std::ostream& operator<< (std::ostream& out, const Polynomial<F> f) {
 	}
 	return out;
 }
-
 template<class F>
 int Polynomial<F>::clean() {
 	int counter = 0;
@@ -75,6 +87,7 @@ int Polynomial<F>::clean() {
 		counter++;
 		coefficients.pop_back();
 	}
+	// return how many terms have been cleaned up
 	return counter;
 }
 
@@ -157,10 +170,16 @@ const Polynomial<F> Polynomial<F>::operator/ (const Polynomial<F>& p) const {
 	result.coefficients.resize(coefficients.size()-p.coefficients.size()+1);
 	Polynomial<F> remainder(*this);
 	int l = p.coefficients.size();
+	if(l==0) {
+		//need to handle division by zero;
+		//I will work on this when I master the way to do exception in C++.
+	}
 	for(int i = (int)(remainder.coefficients.size() - p.coefficients.size()); i>=0;) {
+		// find the quotient of the divison of the current highest-power terms
 		F c = remainder.coefficients.back() / p.coefficients.back();
 		result.coefficients[i]=c;
 		unsigned L = remainder.coefficients.size();
+		// subtract the last l terms from the remainder 
 		for (unsigned j = 1; j<= p.coefficients.size(); j++) {
 			remainder.coefficients[L-j]=remainder.coefficients[L-j] - (p.coefficients[l-j]*c);
 		}
@@ -171,8 +190,12 @@ const Polynomial<F> Polynomial<F>::operator/ (const Polynomial<F>& p) const {
 
 template<class F>
 const Polynomial<F> Polynomial<F>::operator% (const Polynomial<F>& p) const {
-	Polynomial<F> remainder(*this);
 	int l = p.coefficients.size();
+	if(l==0) {
+		//need to handle division by zero;
+		//I will work on this when I master the way to do exception in C++.
+	}
+	Polynomial<F> remainder(*this);
 	for(int i = (int)(remainder.coefficients.size() - p.coefficients.size()); i>=0;) {
 		F c = remainder.coefficients.back() / p.coefficients.back();
 		unsigned L = remainder.coefficients.size();
