@@ -1,26 +1,35 @@
 #include"FiniteField.h"
 #include"Integer.h"
+#include"Polynomial.h"
 #include<iostream>
+#include<vector>
+using namespace std;
+using Polyff::Integer;
+using Polyff::Polynomial;
+using Polyff::operator<<;
+using Polyff::FiniteField;
 using std::cout;
 using std::endl;
 using std::cin;
-using namespace Polyff;
 Integer N(5);
 
 int main () {
-	Integer i1(3);
-	Integer i2(4);
-	cout<<i1<<endl;
-	cout<<i2<<endl;
-	cout<<(i1+i2)<<endl;
-	 
-	FiniteField<Integer, N> f1(7);
-	FiniteField<Integer, N> f2(9);
-	cout<<(f1+f2)<<endl;
-	cout<<(f1*f2)<<endl;
-	cout<<(f1-f2)<<endl;
-	cout<<(f1/f2)<<endl;
-	cout<<f1.inverse()<<endl;
-	cout<<xgcd(Integer(144),Integer(1024))<<endl;
+	cout<<N<<endl;
+	cout<< "testing program is running"<<endl;
+	std::vector<FiniteField<Integer,N> > cs;
+	cs.push_back(FiniteField<Integer, N>(Integer(4)));
+	cs.push_back(FiniteField<Integer, N>(Integer(3)));
+	cs.push_back(FiniteField<Integer, N>(Integer(2)));
+	cout<<cs[0]<<cs[1]<<cs[2]<<cs.size()<<endl;	
+	Polynomial<FiniteField<Integer, N> > p1(cs);
+	cout<< p1<<endl;
+	cout<< (p1+p1) <<endl;
+	cout<< (p1-p1) <<endl;
+	cout<< (p1*p1) <<endl;
+	cout<< (p1*p1/p1/p1) <<endl;
+	cout<< ((p1+p1)/p1)<<endl;
+
+
+	
 	
 }

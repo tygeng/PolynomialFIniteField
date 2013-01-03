@@ -19,7 +19,6 @@ namespace Polyff{
 		static const FiniteField<T,n> one;
 		FiniteField() : _val(T::zero) {};
 		FiniteField(T val) : _val(val%n) {};
-		T getVal() const;
 
 		const FiniteField<T, n> operator+ (const FiniteField<T, n> &f) const;
 		const FiniteField<T, n> operator- (const FiniteField<T, n> &f) const;
@@ -32,7 +31,7 @@ namespace Polyff{
 
 
 	private:
-		friend std::ostream& operator<< <T,n>(std::ostream& out, const FiniteField<T,n>& obj);
+		friend std::ostream& operator<< <>(std::ostream& out, const FiniteField<T,n>& obj);
 		T _val;
 	};
 
